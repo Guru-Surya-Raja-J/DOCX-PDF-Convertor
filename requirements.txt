@@ -1,6 +1,6 @@
 Flask
 Flask-CORS
-cloudinary
 docx2pdf
+cloudinary
+python-dotenv
 gunicorn
-python-dotenv # Optional: Only needed if you use a .env file for local development
