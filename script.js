@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append("file", file);
 
         try {
-            const backendUrl = "http://localhost:5000/convert"; 
+            const backendUrl = "https://my-doc-converter-backend.onrender.com/convert";
 
             const response = await fetch(backendUrl, {
                 method: "POST",
