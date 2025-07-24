@@ -44,6 +44,7 @@ ENV FLASK_ENV=production
 # This CMD will attempt to convert a dummy DOCX to PDF using unoconv on container startup.
 # This will generate logs even if the Flask app doesn't start properly.
 # We'll temporarily use this to debug unoconv, then revert to Gunicorn.
+# --- CRITICAL CHANGE: Reduced Gunicorn workers to 1 (-w 1) ---
 CMD ["/bin/bash", "-c", " \
     echo 'This is a test document.' > test.docx && \
     Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 & \
@@ -51,5 +52,5 @@ CMD ["/bin/bash", "-c", " \
     unoconv -f pdf -o test.pdf test.docx && \
     echo 'unoconv test conversion completed.' && \
     ls -l && \
-    gunicorn -w 4 -b 0.0.0.0:5000 app:app \
+    gunicorn -w 1 -b 0.0.0.0:5000 app:app \
 "]
