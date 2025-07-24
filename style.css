@@ -1,0 +1,338 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f06, #4a90e2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    color: #333;
+    overflow-x: hidden; /* Prevent horizontal scrollbar */
+    overflow-y: auto; /* Allow vertical scrollbar if content exceeds height */
+    position: relative;
+    padding: 10px; /* Reduced padding for very small screens */
+    box-sizing: border-box;
+}
+
+body::before,
+body::after {
+    content: '';
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+body::before {
+    top: -10vw;
+    left: -10vw;
+    width: 30vw;
+    height: 30vw;
+    animation: float1 10s infinite ease-in-out;
+}
+
+body::after {
+    bottom: -10vw;
+    right: -10vw;
+    width: 35vw;
+    height: 35vw;
+    animation: float2 12s infinite ease-in-out;
+}
+
+@keyframes float1 {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(2vw, 3vw); }
+    100% { transform: translate(0, 0); }
+}
+
+@keyframes float2 {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(-3vw, -2vw); }
+    100% { transform: translate(0, 0); }
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 900px; /* Maximum width the container can grow to */
+    width: calc(100% - 20px); /* Adjust width to account for body padding */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-sizing: border-box;
+    margin: auto; /* Center the container with auto margins */
+}
+
+h1 {
+    color: #4a90e2;
+    margin-bottom: 15px;
+    font-size: 2.2em;
+    font-weight: 700;
+}
+
+.description {
+    color: #666;
+    margin-bottom: 25px;
+    font-size: 1em;
+}
+
+.conversion-section {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    min-width: 280px;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+h2 {
+    color: #f06;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.6em;
+    font-weight: 600;
+}
+
+.file-input {
+    display: none;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4a90e2;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-size: 0.95em;
+    text-align: center;
+    width:auto;
+    max-width: 100%;
+}
+
+.custom-file-upload:hover {
+    background-color: #357ABD;
+    transform: translateY(-2px);
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    align-items: center;
+}
+
+.convert-button {
+    background-color: #f06;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease, opacity 0.3s ease;
+    width: 90%;
+    max-width: 250px;
+    box-sizing: border-box;
+}
+
+.convert-button:hover:not(:disabled) {
+    background-color: #d83a5e;
+    transform: translateY(-2px);
+}
+
+.convert-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.status-message {
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: #555;
+    min-height: 20px;
+    word-break: break-word;
+    text-align: center;
+}
+
+.download-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: #4a90e2;
+    text-decoration: none;
+    font-weight: 600;
+    border: 1px solid #4a90e2;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-size: 0.9em;
+}
+
+.download-link:hover {
+    background-color: #4a90e2;
+    color: white;
+}
+
+/* --- Media Queries for Responsiveness --- */
+
+/* For screens smaller than 768px (tablets and smaller) */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px; /* Reduce padding on container */
+        width: calc(100% - 20px); /* Ensures 10px space on each side from body padding */
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    .description {
+        font-size: 0.95em;
+        margin-bottom: 20px;
+    }
+
+    .card {
+        padding: 20px;
+        min-width: unset; /* Allow card to shrink more if needed */
+        width: 100%; /* Take full width within the container */
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+}
+
+/* For screens smaller than 600px (most mobile phones) */
+@media (max-width: 600px) {
+    body {
+        padding: 5px; /* Even less padding on very small screens */
+    }
+
+    .container {
+        padding: 15px; /* Further reduce container padding */
+        width: calc(100% - 10px); /* Ensures 5px space on each side from body padding */
+        border-radius: 10px; /* Slightly smaller border-radius */
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+
+    .description {
+        font-size: 0.9em;
+        margin-bottom: 15px;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    h2 {
+        font-size: 1.4em;
+    }
+
+    .custom-file-upload,
+    .convert-button {
+        padding: 10px 15px;
+        font-size: 0.9em;
+        width:80%; /* Make buttons truly full width within card */
+        max-width: unset; /* Remove max-width constraint here */
+    }
+    
+    .button-group {
+        gap: 8px; /* Slightly less gap between buttons */
+    }
+
+    .status-message, .download-link {
+        font-size: 0.85em;
+    }
+}
+
+/* For screens smaller than 400px (very small phones) */
+@media (max-width: 400px) {
+    body {
+        padding: 0; /* Remove body padding, let container handle it */
+    }
+
+    .container {
+        padding: 10px; /* Minimal container padding */
+        width: 100%; /* Full width */
+        border-radius: 0; /* Sharp corners or very minimal radius */
+    }
+
+    h1 {
+        font-size: 1.6em;
+    }
+
+    .description {
+        font-size: 0.8em;
+        margin-bottom: 10px;
+    }
+
+    .card {
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    h2 {
+        font-size: 1.2em;
+    }
+
+    .custom-file-upload,
+    .convert-button,
+    .download-link {
+        font-size: 0.8em;
+        padding: 7px 10px;
+    }
+}
+
+/* For very large screens (e.g., high-res desktops) */
+@media (min-width: 1400px) {
+    .container {
+        padding: 60px;
+    }
+
+    h1 {
+        font-size: 3.2em;
+    }
+
+    .description {
+        font-size: 1.3em;
+    }
+
+    .card {
+        padding: 45px;
+    }
+
+    h2 {
+        font-size: 2.2em;
+    }
+}

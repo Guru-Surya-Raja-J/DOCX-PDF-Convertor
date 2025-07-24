@@ -1,0 +1,6 @@
+Flask
+Flask-CORS
+cloudinary
+docx2pdf
+gunicorn
+python-dotenv # Optional: Only needed if you use a .env file for local development

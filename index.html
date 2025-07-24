@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stunning Document Converter</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/337/337946.png" type="image/png">  
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>DOCX &harr; PDF Converter</h1>
+        <p class="description">Effortlessly convert your documents between Word and PDF formats.</p>
+
+        <div class="conversion-section">
+            <div class="card">
+                <h2>Select File & Convert</h2>
+                <p>Choose your document and hit convert Ease tooo goo.</p>
+                
+                <input type="file" id="fileInput" accept=".docx" class="file-input">
+                <label for="fileInput" class="custom-file-upload">Choose File</label>
+                
+                <div class="button-group">
+                    <button id="convertDocxToPdf" class="convert-button" disabled>Convert DOCX to PDF</button>
+                </div>
+                
+                <div class="status-message" id="statusMsg"></div>
+                <a id="downloadLink" class="download-link" style="display: none;">Download Converted File</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- IMPORTANT: Moved script.js here, just before the closing </body> tag -->
+    <script src="script.js"></script>
+</body>
+</html>
