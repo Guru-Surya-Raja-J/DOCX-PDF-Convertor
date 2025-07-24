@@ -5,6 +5,14 @@ FROM python:3.9-slim-bullseye
 WORKDIR /app
 
 # Install LibreOffice and other necessary system dependencies for headless conversion
+# LibreOffice is required by docx2pdf for conversion
+# unoconv is essential for docx2pdf to interface with LibreOffice
+# libreoffice-writer is the component for .docx
+# fonts-liberation for better font rendering
+# xvfb is a virtual framebuffer, often needed for headless GUI apps like LibreOffice
+# libfontconfig1, libice6, libsm6, libxrender1, libxtst6 are common dependencies for LibreOffice
+# xauth is required by xvfb-run for display authentication
+# default-jre is added to provide a Java Runtime Environment for LibreOffice
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         libreoffice-writer \
@@ -25,11 +33,8 @@ RUN apt-get update \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the start.sh script and make it executable
-COPY start.sh .
-RUN chmod +x start.sh
-
 # Copy all your application files into the container
+# We will NOT copy start.sh anymore
 COPY . .
 
 # Expose the port your Flask app runs on
@@ -39,6 +44,7 @@ EXPOSE 5000
 ENV FLASK_APP=app.py
 ENV FLASK_ENV=production
 
-# --- CRITICAL CHANGE: Use start.sh as the entry point ---
-CMD ["./start.sh"]
-
+# --- CRITICAL CHANGE: Simplify CMD to directly run Gunicorn ---
+# We rely on docx2pdf to manage LibreOffice's lifecycle or for LibreOffice to be callable.
+# We also set DISPLAY here directly for LibreOffice.
+CMD ["/bin/bash", "-c", "export DISPLAY=:99 && gunicorn -w 4 -b 0.0.0.0:5000 app:app"]
