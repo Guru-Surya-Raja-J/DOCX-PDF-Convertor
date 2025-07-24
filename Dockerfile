@@ -5,14 +5,6 @@ FROM python:3.9-slim-bullseye
 WORKDIR /app
 
 # Install LibreOffice and other necessary system dependencies for headless conversion
-# LibreOffice is required by docx2pdf for conversion
-# unoconv is essential for docx2pdf to interface with LibreOffice
-# libreoffice-writer is the component for .docx
-# fonts-liberation for better font rendering
-# xvfb is a virtual framebuffer, often needed for headless GUI apps like LibreOffice
-# libfontconfig1, libice6, libsm6, libxrender1, libxtst6 are common dependencies for LibreOffice
-# xauth is required by xvfb-run for display authentication
-# default-jre is added to provide a Java Runtime Environment for LibreOffice
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         libreoffice-writer \
@@ -33,6 +25,10 @@ RUN apt-get update \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Copy the start.sh script and make it executable
+COPY start.sh .
+RUN chmod +x start.sh
+
 # Copy all your application files into the container
 COPY . .
 
@@ -43,11 +39,6 @@ EXPOSE 5000
 ENV FLASK_APP=app.py
 ENV FLASK_ENV=production
 
-# --- Start LibreOffice as a background process, then Gunicorn ---
-# CMD runs a shell script to ensure both processes start
-CMD ["/bin/bash", "-c", " \
-    Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 & \
-    export DISPLAY=:99 && \
-    libreoffice --headless --invisible --nocrashreport --nodefault --nofirststartwizard --nologo --norestore & \
-    gunicorn -w 4 -b 0.0.0.0:5000 app:app \
-"]
+# --- CRITICAL CHANGE: Use start.sh as the entry point ---
+CMD ["./start.sh"]
+
