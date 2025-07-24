@@ -1,5 +1,5 @@
-# Use a base image that includes Python and is Debian-based for apt-get
-FROM python:3.9-slim-buster
+# Use a base image that includes Python and is Debian 11 (bullseye)
+FROM python:3.9-slim-bullseye # <--- CHANGED FROM buster TO bullseye
 
 # Set the working directory inside the container
 WORKDIR /app
