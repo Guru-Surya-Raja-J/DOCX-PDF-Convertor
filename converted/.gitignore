@@ -1,0 +1,14 @@
+# Python
+*.pyc
+__pycache__/
+venv/
+.pytest_cache/
+.env
+
+# Temporary directories for the app
+uploads/
+converted/
+
+# IDE specific files
+.vscode/
+.idea/
