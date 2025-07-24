@@ -5,6 +5,14 @@ FROM python:3.9-slim-bullseye
 WORKDIR /app
 
 # Install LibreOffice and other necessary system dependencies for headless conversion
+# LibreOffice is required by docx2pdf for conversion
+# unoconv is essential for docx2pdf to interface with LibreOffice
+# libreoffice-writer is the component for .docx
+# fonts-liberation for better font rendering
+# xvfb is a virtual framebuffer, often needed for headless GUI apps like LibreOffice
+# libfontconfig1, libice6, libsm6, libxrender1, libxtst6 are common dependencies for LibreOffice
+# xauth is required by xvfb-run for display authentication
+# default-jre is added to provide a Java Runtime Environment for LibreOffice
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         libreoffice-writer \
@@ -17,6 +25,7 @@ RUN apt-get update \
         libxrender1 \
         libxtst6 \
         xauth \
+        default-jre \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
@@ -34,7 +43,7 @@ EXPOSE 5000
 ENV FLASK_APP=app.py
 ENV FLASK_ENV=production
 
-# --- CRITICAL CHANGE: Start LibreOffice as a background process, then Gunicorn ---
+# --- Start LibreOffice as a background process, then Gunicorn ---
 # CMD runs a shell script to ensure both processes start
 CMD ["/bin/bash", "-c", " \
     Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 & \
