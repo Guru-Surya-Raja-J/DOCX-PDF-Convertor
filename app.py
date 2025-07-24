@@ -24,15 +24,15 @@ CONVERTED_FOLDER = "converted"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(CONVERTED_FOLDER, exist_ok=True)
 
-# --- NEW: Health Check Endpoint (remains the same) ---
+# --- Health Check Endpoint (remains the same) ---
 @app.route("/health", methods=["GET"])
 def health_check():
     print("Health check endpoint hit!")
-    sys.stdout.flush() # Force log output
+    sys.stdout.flush()
     try:
         result = subprocess.run(["libreoffice", "--version"], capture_output=True, text=True, check=True, timeout=10)
         print(f"LibreOffice --version output: {result.stdout.strip()}")
-        sys.stdout.flush() # Force log output
+        sys.stdout.flush()
         return jsonify({
             "status": "ok",
             "message": "Backend is running and LibreOffice appears accessible.",
@@ -54,7 +54,7 @@ def health_check():
 @app.route("/convert", methods=["POST"])
 def convert_file():
     print("Convert endpoint hit!")
-    sys.stdout.flush() # Force log output
+    sys.stdout.flush()
     if 'file' not in request.files:
         print("Error: No file provided.")
         sys.stdout.flush()
@@ -83,13 +83,11 @@ def convert_file():
         
         command = [python_executable, os.path.join(os.path.dirname(__file__), 'converter_worker.py'), input_path, output_path]
         
-        # --- CRITICAL CHANGE: Pass environment variables explicitly to subprocess ---
-        # This ensures DISPLAY=:99 is available to converter_worker.py
         env_vars = os.environ.copy()
         env_vars["DISPLAY"] = ":99"
         
         try:
-            result = subprocess.run(command, capture_output=True, text=True, check=True, timeout=300, env=env_vars) # Added env=env_vars
+            result = subprocess.run(command, capture_output=True, text=True, check=True, timeout=300, env=env_vars)
             print(f"Subprocess stdout:\n{result.stdout}")
             print(f"Subprocess stderr:\n{result.stderr}")
             print(f"Conversion successful via subprocess. PDF saved at: {output_path}")
@@ -102,7 +100,7 @@ def convert_file():
             if os.path.exists(input_path):
                 os.remove(input_path)
             return jsonify({
-                "error": "Local conversion failed. Check server logs for details. (Possibly LibreOffice/Word issue)",
+                "error": "Local conversion failed. Check server logs for details. (Possibly LibreOffice/unoconv issue)",
                 "details": e.stderr if e.stderr else str(e)
             }), 500
         except FileNotFoundError:
