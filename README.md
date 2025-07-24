@@ -1,6 +1,4 @@
-Absolutely, Kakarot 🍀—here's your **complete professional `README.md`** in one **single copyable block**, clean and focused, perfect for GitHub:
 
----
 
 ````markdown
 # DOCX to PDF Converter
@@ -175,11 +173,5 @@ Make sure to update `backendUrl` in `script.js` to your hosted backend URL.
 
 This project is licensed under the MIT License.
 
-```
 
----
 
-✅ Copy that entire block and paste it as your `README.md` file — it's clean, terminal-friendly, GitHub-ready, and easy to maintain.
-
-Need badges, deployment buttons, or markdown enhancements next? Just say the word!
-```
