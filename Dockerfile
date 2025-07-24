@@ -11,6 +11,7 @@ WORKDIR /app
 # fonts-liberation for better font rendering
 # xvfb is a virtual framebuffer, often needed for headless GUI apps like LibreOffice
 # libfontconfig1, libice6, libsm6, libxrender1, libxtst6 are common dependencies for LibreOffice
+# xauth is required by xvfb-run for display authentication
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         libreoffice-writer \
@@ -22,6 +23,7 @@ RUN apt-get update \
         libsm6 \
         libxrender1 \
         libxtst6 \
+        xauth \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
