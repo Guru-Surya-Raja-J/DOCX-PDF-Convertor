@@ -40,5 +40,5 @@ ENV FLASK_APP=app.py
 ENV FLASK_ENV=production
 
 # Command to run the application using Gunicorn (a production-ready WSGI server)
-# We also add an XVFB command to ensure LibreOffice runs in a virtual display
-CMD ["xvfb-run", "--auto-display", "gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
+# Use a specific display number for xvfb-run (e.g., :99) instead of --auto-display
+CMD ["xvfb-run", "-a", "-s", "-screen 0 1024x768x24", "gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
