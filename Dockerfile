@@ -21,6 +21,11 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
+# --- CRITICAL CHANGE: Set PYTHONPATH for pyuno ---
+# This tells Python where to find the 'uno' module required by unoconv.
+# The path might vary slightly based on LibreOffice version, but this is common for Debian.
+ENV PYTHONPATH=/usr/lib/python3/dist-packages:$PYTHONPATH
+
 # Copy your Python requirements file and install them
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
@@ -35,7 +40,7 @@ EXPOSE 5000
 ENV FLASK_APP=app.py
 ENV FLASK_ENV=production
 
-# --- CRITICAL CHANGE: CMD to test unoconv directly ---
+# --- CMD to test unoconv directly ---
 # This CMD will attempt to convert a dummy DOCX to PDF using unoconv on container startup.
 # This will generate logs even if the Flask app doesn't start properly.
 # We'll temporarily use this to debug unoconv, then revert to Gunicorn.
