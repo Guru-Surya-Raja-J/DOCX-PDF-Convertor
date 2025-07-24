@@ -4,22 +4,32 @@ FROM python:3.9-slim-bullseye
 # Set the working directory inside the container
 WORKDIR /app
 
-# Install LibreOffice and other necessary system dependencies
+# Install LibreOffice and other necessary system dependencies for headless conversion
 # LibreOffice is required by docx2pdf for conversion
+# unoconv is essential for docx2pdf to interface with LibreOffice
+# libreoffice-writer is the component for .docx
+# fonts-liberation for better font rendering
+# xvfb is a virtual framebuffer, often needed for headless GUI apps like LibreOffice
+# libfontconfig1, libice6, libsm6, libxrender1, libxtst6 are common dependencies for LibreOffice
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         libreoffice-writer \
         fonts-liberation \
         unoconv \
-    # Clean up apt cache to keep image size small
-    && rm -rf /var/lib/apt/lists/*
+        xvfb \
+        libfontconfig1 \
+        libice6 \
+        libsm6 \
+        libxrender1 \
+        libxtst6 \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
 
 # Copy your Python requirements file and install them
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy all your application files into the container
-# This includes app.py, converter_worker.py, index.html, script.js, style.css
 COPY . .
 
 # Expose the port your Flask app runs on
@@ -30,7 +40,5 @@ ENV FLASK_APP=app.py
 ENV FLASK_ENV=production
 
 # Command to run the application using Gunicorn (a production-ready WSGI server)
-# -w 4: Run with 4 worker processes (adjust based on server resources)
-# -b 0.0.0.0:5000: Bind to all network interfaces on port 5000
-# app:app: Specifies your Flask application instance (app.py:app)
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
+# We also add an XVFB command to ensure LibreOffice runs in a virtual display
+CMD ["xvfb-run", "--auto-display", "gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
