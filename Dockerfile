@@ -35,16 +35,16 @@ EXPOSE 5000
 ENV FLASK_APP=app.py
 ENV FLASK_ENV=production
 
-# --- CRITICAL CHANGE: CMD to test LibreOffice directly ---
-# This CMD will attempt to convert a dummy DOCX to PDF on container startup.
+# --- CRITICAL CHANGE: CMD to test unoconv directly ---
+# This CMD will attempt to convert a dummy DOCX to PDF using unoconv on container startup.
 # This will generate logs even if the Flask app doesn't start properly.
-# We'll temporarily use this to debug LibreOffice, then revert to Gunicorn.
+# We'll temporarily use this to debug unoconv, then revert to Gunicorn.
 CMD ["/bin/bash", "-c", " \
     echo 'This is a test document.' > test.docx && \
     Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 & \
     export DISPLAY=:99 && \
-    libreoffice --headless --invisible --nocrashreport --nodefault --nofirststartwizard --nologo --norestore --convert-to pdf test.docx --outdir . && \
-    echo 'LibreOffice test conversion completed.' && \
+    unoconv -f pdf -o test.pdf test.docx && \
+    echo 'unoconv test conversion completed.' && \
     ls -l && \
     gunicorn -w 4 -b 0.0.0.0:5000 app:app \
 "]
